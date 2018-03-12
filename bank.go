@@ -2,13 +2,13 @@ package main
 
 import(
 	"fmt"
-	"github.com/rs/xid"
 	"sync"
-	"sync/atomic"
 )
 
 var entranceLock sync.Mutex
-var queue_num uint32
+var queueNum uint32
+//var customerQueue [100]chan Client
+var customerQueue = make(chan Client, 10000)
 
 func start(){
 	fmt.Println("Simulation started, welcome to UOM bank.")
@@ -16,50 +16,46 @@ func start(){
 
 type Bank struct {
 
-	serve_points []Serve_point
+	serve_points []ServePoint
 	entrances []Entrance
 
 }
 
 type Entrance struct {
 
-	clients []Client
 	entranceNum int
 
 }
 
-func (e *Entrance) newClient() Client{
+func (s *ServePoint) serveClient(){
 
-	client := Client{genXid(),take_number(&queue_num)}
+
+}
+
+func (e *Entrance) newClient() {
+
 	entranceLock.Lock()
-	e.clients = append(e.clients, client)
+	client := Client{take_number(&queueNum)}
+	fmt.Println("Customer arrived", client.ticketNum, e.entranceNum)
+	customerQueue <- client
 	entranceLock.Unlock()
-	return client
+
 }
 
 type Client struct{
+	ticketNum uint32
+}
 
-	client_id string
-	ticket_num uint32
+type ServePoint struct{
+
 
 }
 
-func genXid() string{
-	id := xid.New()
-	return id.String()
-}
-
-type Serve_point struct{
-
-}
-
-type Waiting_queue struct{
-
-
-}
 
 func take_number(queue_num *uint32) uint32{
-	atomic.AddUint32(queue_num, 1)
-	return *queue_num;
+	//No need to use as we already lock the add operation in the MUTEX
+	//atomic.AddUint32(queue_num, 1)
+	queueNum+=1
+	return *queue_num
 }
 
