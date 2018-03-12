@@ -1,10 +1,15 @@
 package main
 
-import "sync"
+import (
+	"time"
+	"fmt"
+)
 
-func StartSimulation(e *Entrance, wg *sync.WaitGroup){
-	defer wg.Done()
-	e.newClient()
+func SimulateClientToEntrance(e *Entrance){
+
+	time.Sleep(time.Duration(GetRandomSleepTime(10000)) * time.Millisecond)
+	fmt.Println(e.newClient(), e.entranceNum)
+
 }
 
 

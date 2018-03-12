@@ -8,7 +8,6 @@ import(
 )
 
 var entranceLock sync.Mutex
-
 var queue_num uint32
 
 func start(){
@@ -22,11 +21,10 @@ type Bank struct {
 
 }
 
-
-
 type Entrance struct {
 
 	clients []Client
+	entranceNum int
 
 }
 
