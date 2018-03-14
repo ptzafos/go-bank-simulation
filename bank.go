@@ -34,10 +34,10 @@ var syncQueue = make(chan int, D)
 
 func start(){
 	fmt.Println()
-	fmt.Println("\t\t\t\t\t\t\t\tSimulation started, welcome to UOM bank.")
-	fmt.Println("---------------------------------------------------------------------------------------------------------")
-	fmt.Println("Clients\t\t\t\t\tQueueNum-WaitTime\t\t\t\tServePoint-NumServing\t\tServePoint-NumServed")
-	fmt.Println("---------------------------------------------------------------------------------------------------------")
+	fmt.Println("\t\t\t\tSimulation started, welcome to UOM bank.")
+	fmt.Println("-----------------------------------------------------------------------------------------------------------------")
+	fmt.Println("Clients\t\t\tQueueNum-WaitTime\t\tServePoint-NumServing\t\tServePoint-NumServed")
+	fmt.Println("-----------------------------------------------------------------------------------------------------------------")
 }
 
 type Bank struct {
@@ -69,10 +69,10 @@ func (s *ServePoint) serveClient(){
 	globalServeLock.Lock()
 	//s.ServePointLock.Lock()
 	client := <- customerQueue
-	fmt.Println("\t\t\t\t\t\t\t\t\t\t\t\t\t\tServPoint:",s.servePointNum, "TickServ:",client.ticketNum)
+	fmt.Println("\t\t\t\t\t\t\tServPoint:",s.servePointNum, "TickServ:",client.ticketNum)
 	globalServeLock.Unlock()
 	time.Sleep(GetRandomSleepTime(customerServeTime))
-	fmt.Println("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tServPoint:",s.servePointNum, "TickServed:",client.ticketNum)
+	fmt.Println("\t\t\t\t\t\t\t\t\t\t\tServPoint:",s.servePointNum, "TickServed:",client.ticketNum)
 	//s.ServePointLock.Unlock()
 }
 
