@@ -3,7 +3,7 @@ Serving bank clients simulation implemented in Golang for Distributed and Parall
 
 ### Instructions
 
-Open a windows terminal and execute the commands below:
+Open a linux terminal and execute the commands below:
 
 ```
 git clone https://github.com/ptzafos/go-bank-simulation.git
