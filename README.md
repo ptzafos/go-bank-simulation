@@ -7,6 +7,7 @@ Open a windows terminal and execute the commands below:
 
 ```
 git clone https://github.com/ptzafos/go-bank-simulation.git
+cd go-bank-simulation
 go build
-./main
+./go-bank-simulation
 ```
