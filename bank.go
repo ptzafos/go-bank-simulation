@@ -7,10 +7,13 @@ import(
 )
 
 //number of entrances
+//TRY WITH ZERO
 const A = 2
 //number of customers coming in random time frames
+//TRY WITH ZERO
 const B = 3
 //number of serve points
+//TRY WITH ZERO
 const C = 5
 //Max Bank Capacity
 const D = 100
@@ -23,16 +26,18 @@ const timeFrameForNewCustomers = 1300 * timeWaitDegree
 
 
 var entranceLock sync.Mutex
+var globalServeLock sync.Mutex
 var queueNum int
 var customerQueue = make(chan Client, D)
 //Help channel in order to use for select in ServePointsSimulation
 var syncQueue = make(chan int, D)
 
 func start(){
-	fmt.Println("Simulation started, welcome to UOM bank.")
 	fmt.Println()
+	fmt.Println("\t\t\t\t\t\t\t\tSimulation started, welcome to UOM bank.")
+	fmt.Println("---------------------------------------------------------------------------------------------------------")
 	fmt.Println("Clients\t\t\t\t\tQueueNum-WaitTime\t\t\t\tServePoint-NumServing\t\tServePoint-NumServed")
-	fmt.Println("------------------------------------------------------------------------------------------------------")
+	fmt.Println("---------------------------------------------------------------------------------------------------------")
 }
 
 type Bank struct {
@@ -59,13 +64,16 @@ func (e *Entrance) newClient() {
 }
 
 func (s *ServePoint) serveClient(){
-
-	s.ServePointLock.Lock()
+	//In case we care for the correct printing sequence we need to use a global lock
+	//to ensure that printing is happening at the same time as client reaches a ServePoint
+	globalServeLock.Lock()
+	//s.ServePointLock.Lock()
 	client := <- customerQueue
 	fmt.Println("\t\t\t\t\t\t\t\t\t\t\t\t\t\tServPoint:",s.servePointNum, "TickServ:",client.ticketNum)
+	globalServeLock.Unlock()
 	time.Sleep(GetRandomSleepTime(customerServeTime))
 	fmt.Println("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tServPoint:",s.servePointNum, "TickServed:",client.ticketNum)
-	s.ServePointLock.Unlock()
+	//s.ServePointLock.Unlock()
 }
 
 
