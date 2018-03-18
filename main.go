@@ -1,9 +1,15 @@
 package main
 
+import (
+	"os"
+	"os/signal"
+)
+
 func main() {
 
 	start()
-	var block = make(chan int)
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt)
 	bank := Bank{make([]ServePoint,C), make([]Entrance,A)}
 	for i := 0; i < A; i++{
 		bank.entrances[i].entranceNum = i+1
@@ -13,10 +19,6 @@ func main() {
 	}
 	go ServePointStartWorking(&bank.servePoints)
 	go CustomersAreComing(&bank.entrances)
-	for {
-		select{
-			case <-block:
-		}
-	}
+	<-interrupt
 }
 
